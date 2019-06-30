@@ -24,7 +24,7 @@
                         size="20">
                     </icon>
                 </li>
-                <li>
+                <li @click="goSearch">
                     <span>面试地址</span>
                     <input type="text" placeholder="请选择面试地址">
                 </li>
@@ -49,6 +49,11 @@ export default {
                 title: '在面试前一个小时我们会通知你哦',
                 icon: 'none',
                 duration: 2000
+            })
+        },
+        goSearch(){
+            wx.navigateTo({
+                url: '/pages/search/main'
             })
         }
     }

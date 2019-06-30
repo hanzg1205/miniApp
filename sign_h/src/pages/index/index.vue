@@ -2,10 +2,10 @@
   <div class="home">
     <div class="map">
       <QQMap></QQMap>
-      <div class="icon-btn">
-        <img src="/static/images/location.png" alt="">
-        <img src="/static/images/my.png" alt="" class="myBtn" @click="goMyFn">
-      </div>
+      <cover-view class="icon-btn">       
+        <cover-image src="/static/images/location.png" alt="" class="img-btn"></cover-image>
+        <cover-image src="/static/images/my.png" alt="" class="img-btn myBtn" @click="goMyFn"></cover-image>
+      </cover-view>
     </div>   
     <button @click="addSign" class="btn">添加面试</button>
   </div>
@@ -80,7 +80,7 @@ page{
   box-sizing: border-box;
   z-index: 999;
 }
-.icon-btn img{
+.icon-btn .img-btn{
   width:80rpx;
   height:80rpx;
 }
