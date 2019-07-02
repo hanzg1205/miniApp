@@ -36,10 +36,6 @@ export default {
       })
     }
   },
-
-  created () {
-    // let app = getApp()
-  }
 }
 </script>
 

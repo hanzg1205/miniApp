@@ -1,4 +1,10 @@
+<template>
+  <button open-type="getUserInfo">韩志刚</button>
+</template>
+
 <script>
+import {login} from "./api";
+import { mapMutations } from "vuex";
 export default {
   created () {
     // 调用API从本地缓存中获取数据
@@ -10,23 +16,57 @@ export default {
      * 支付宝(蚂蚁)：mpvue === my, mpvuePlatform === 'my'
      */
 
-    let logs
-    if (mpvuePlatform === 'my') {
-      logs = mpvue.getStorageSync({key: 'logs'}).data || []
-      logs.unshift(Date.now())
-      mpvue.setStorageSync({
-        key: 'logs',
-        data: logs
-      })
-    } else {
-      logs = mpvue.getStorageSync('logs') || []
-      logs.unshift(Date.now())
-      mpvue.setStorageSync('logs', logs)
-    }
+    // 登录
+    wx.login({
+      success: async res => {
+        const {data}=await login(res);
+        console.log('openid...',data);
+        this.updateState(data);        
+        wx.setStorageSync('openId',data.openid)
+        // 发送 res.code 到后台换取 openId, sessionKey, unionId
+      }
+    })
+    wx.getSetting({
+      success: res => {
+        console.log('res....',res)
+        // 如果已授权
+        if (res.authSetting['scope.userLocation']) {
+          wx.getUserInfo();
+        } else {
+          wx.getSetting({
+            success: res => {
+              if (!res.authSetting['scope.userLocation']){
+                wx.authorize({
+                  scope: 'scope.userLocation',
+                  success() {
+                    wx.getUserInfo();
+                  },
+                  fail: () => {
+                    wx.showModal({
+                      title: '亲爱的用户', //提示的标题,
+                      content: '同意我们的授权，让我们为你提供更加优质的服务', //提示的内容,
+                      showCancel: false, //是否显示取消按钮,
+                      confirmText: '去设置', //确定按钮的文字，默认为取消，最多 4 个字符,
+                      confirmColor: '#3CC51F',   //确定按钮的文字颜色
+                      success: res => {
+                        wx.openSetting();
+                      }
+                    })
+                  }
+                })
+              }
+            }
+          })        
+        }
+      }
+    })
   },
-  log () {
-    console.log(`log at:${Date.now()}`)
+  methods:{
+    ...mapMutations({
+      updateState: 'updateState'
+    })
   }
+
 }
 </script>
 
