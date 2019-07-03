@@ -5,6 +5,7 @@ import createLogger from 'vuex/dist/logger';
 // 引入子模块
 import index from './modules/index';
 import addSign from "./modules/addSign";
+import signList from "./modules/signList";
 
 Vue.use(Vuex);
 
@@ -14,7 +15,8 @@ export default new Vuex.Store({
     },
     modules: {
         index,
-        addSign
+        addSign,
+        signList
     },
     mutations: {
         // 更新全局的state

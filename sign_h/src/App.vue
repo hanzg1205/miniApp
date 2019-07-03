@@ -1,6 +1,3 @@
-<template>
-  <button open-type="getUserInfo">韩志刚</button>
-</template>
 
 <script>
 import {login} from "./api";
@@ -26,40 +23,40 @@ export default {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
       }
     })
-    wx.getSetting({
-      success: res => {
-        console.log('res....',res)
-        // 如果已授权
-        if (res.authSetting['scope.userLocation']) {
-          wx.getUserInfo();
-        } else {
-          wx.getSetting({
-            success: res => {
-              if (!res.authSetting['scope.userLocation']){
-                wx.authorize({
-                  scope: 'scope.userLocation',
-                  success() {
-                    wx.getUserInfo();
-                  },
-                  fail: () => {
-                    wx.showModal({
-                      title: '亲爱的用户', //提示的标题,
-                      content: '同意我们的授权，让我们为你提供更加优质的服务', //提示的内容,
-                      showCancel: false, //是否显示取消按钮,
-                      confirmText: '去设置', //确定按钮的文字，默认为取消，最多 4 个字符,
-                      confirmColor: '#3CC51F',   //确定按钮的文字颜色
-                      success: res => {
-                        wx.openSetting();
-                      }
-                    })
-                  }
-                })
-              }
-            }
-          })        
-        }
-      }
-    })
+    // wx.getSetting({
+    //   success: res => {
+    //     console.log('res....',res)
+    //     // 如果已授权
+    //     if (res.authSetting['scope.userLocation']) {
+    //       wx.getUserInfo();
+    //     } else {
+    //       wx.getSetting({
+    //         success: res => {
+    //           if (!res.authSetting['scope.userLocation']){
+    //             wx.authorize({
+    //               scope: 'scope.userLocation',
+    //               success() {
+    //                 wx.getUserInfo();
+    //               },
+    //               fail: () => {
+    //                 wx.showModal({
+    //                   title: '亲爱的用户', //提示的标题,
+    //                   content: '同意我们的授权，让我们为你提供更加优质的服务', //提示的内容,
+    //                   showCancel: false, //是否显示取消按钮,
+    //                   confirmText: '去设置', //确定按钮的文字，默认为取消，最多 4 个字符,
+    //                   confirmColor: '#3CC51F',   //确定按钮的文字颜色
+    //                   success: res => {
+    //                     wx.openSetting();
+    //                   }
+    //                 })
+    //               }
+    //             })
+    //           }
+    //         }
+    //       })        
+    //     }
+    //   }
+    // })
   },
   methods:{
     ...mapMutations({

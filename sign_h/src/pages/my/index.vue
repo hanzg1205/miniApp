@@ -28,14 +28,18 @@
                 <img src="/static/images/arrow.svg" alt="">
             </li>
         </ul>
+        <button open-type="getPhoneNumber" v-if="!hasPhone" @getphonenumber="getPhoneNumber">获取手机号</button>
+        <button open-type="openSetting" v-if="showSetting">打开授权设置页</button>
     </div>
 </template>
 
 <script>
+import { encryptData } from "@/api";
 export default {
     data(){
         return {
-            
+            showSetting: false,
+            hasPhone: false
         }
     },
     methods: {
@@ -43,7 +47,39 @@ export default {
             wx.navigateTo({
                 url: '/pages/list/main'
             })  
+        },
+        async getPhoneNumber(e){
+            console.log('ee...',e)
+            if(e.target.errMsg != "getPhoneNumber:fail user deny"){
+             
+
+                let data = await encryptData({
+                    encryptedData: e.target.encryptedData,
+                    iv: e.target.iv
+                })
+                console.log(data)
+            }else{
+                this.showSetting = true;
+            }
         }
+    },
+    created(){
+        let that = this;
+        wx.getSetting({
+            success(res){
+                console.log('auth....',res.authSetting)
+                if(res.authSetting['scope.userInfo']){
+                    wx.getUserInfo({
+                        withCredentials: true,
+                        success(res){
+                            that.hasPhone = true;
+                        }
+                    })
+                }else{
+                    that.hasPhone = false;
+                }
+            }
+        })
     }
 }
 </script>

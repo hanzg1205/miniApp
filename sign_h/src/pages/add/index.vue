@@ -1,6 +1,6 @@
 <template>
     <div class="add">
-        <form @submit="submit" report-submit>
+        <form @submit="submit" report-submit="true">
             <h5 class="title">面试信息</h5>
             <ul class="content">
                 <li>
@@ -60,7 +60,7 @@ export default {
             btnFlag: false
         }
     },
-    create(){
+    created(){
         // 如果当前时间是十一点之后，过滤掉今天
         if (moment().hour() == 23){
             this.info.date = [1,0,0];

@@ -33,12 +33,10 @@ export default {
     created(){
         let that = this;
         this.search = function(val){
-            console.log('val...',val)
             this.$map.search({
                 keyword: val,
                 region: '北京',
                 success: function(res){
-                    console.log(res);
                     that.signList = res.data;
                 }
             })  
