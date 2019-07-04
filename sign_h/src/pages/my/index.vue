@@ -4,7 +4,7 @@
             <div class="avator">
                 <img src="/static/images/my.png" alt="">
             </div>
-            <h4 class="title">15934567149</h4>
+            <h4 class="title">{{phoneNumber}}</h4>
         </div>
         <ul class="my-list">
             <li @click="goListFn">
@@ -28,8 +28,12 @@
                 <img src="/static/images/arrow.svg" alt="">
             </li>
         </ul>
-        <button open-type="getPhoneNumber" v-if="!hasPhone" @getphonenumber="getPhoneNumber">获取手机号</button>
-        <button open-type="openSetting" v-if="showSetting">打开授权设置页</button>
+        <div class="phone" v-if="showPhoneDialog" >
+            <p>为了更好的使用我们的服务，我们需要获取你的手机号码</p>
+            <button open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">同意</button>
+        </div>
+        <!-- <button open-type="getPhoneNumber" v-if="!hasPhone" @getphonenumber="getPhoneNumber">获取手机号</button> -->
+        <!-- <button open-type="openSetting" v-if="showSetting">打开授权设置页</button> -->
     </div>
 </template>
 
@@ -39,7 +43,9 @@ export default {
     data(){
         return {
             showSetting: false,
-            hasPhone: false
+            hasPhone: false,
+            phoneNumber: '',
+            showPhoneDialog: true
         }
     },
     methods: {
@@ -51,13 +57,22 @@ export default {
         async getPhoneNumber(e){
             console.log('ee...',e)
             if(e.target.errMsg != "getPhoneNumber:fail user deny"){
-             
-
                 let data = await encryptData({
                     encryptedData: e.target.encryptedData,
                     iv: e.target.iv
                 })
-                console.log(data)
+                this.phoneNumber = data.data.phoneNumber;
+                console.log('getPhoneNumber...',data);
+                this.showPhoneDialog = false;
+                if (data.data.phoneNumber){
+                    wx.showToast({
+                    title: '绑定手机号成功', 
+                    });
+                }else{
+                    wx.showToast({
+                    title: '绑定手机号失败',
+                    });
+                }
             }else{
                 this.showSetting = true;
             }
@@ -128,5 +143,34 @@ export default {
     .my-list li icon{
         width:40rpx;
         height:40rpx;
+    }
+    .phone{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0, .3);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;       
+    }
+    .phone p{
+        border-top-left-radius: 20rpx;
+        border-top-right-radius: 20rpx;
+        width:70%;
+        background:#fff;
+        padding:20rpx 15rpx;
+        line-height: 1.5;
+        font-size:34rpx;
+        box-sizing:border-box;
+    }
+    .phone button{
+        width: 70%;
+        background: #197DBF;
+        color: #fff;
+        border-bottom-left-radius: 20rpx;
+        border-bottom-right-radius: 20rpx;
     }
 </style>

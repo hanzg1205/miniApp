@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 import SignList from "@/components/signList.vue";
 export default {
     data(){
@@ -32,15 +32,20 @@ export default {
     },
     computed:{
         ...mapState({
-            signList: state => state.signList.signList
+            signList: state => state.signList.signList,
+            page: state => state.signList.page
         })
     },
     methods: {
         ...mapActions({
             getList: 'signList/getList'
         }), 
+        ...mapMutations({
+            updatePage: 'signList/updatePage'
+        }),
         navTab(index){
             this.idx = index;
+            this.updatePage(1);
             if(index === 3){
                 this.getList()
             }else{
@@ -49,29 +54,46 @@ export default {
         },     
     },
     onShow(){
-        this.getList({status:-1})  
+        this.updatePage(1);
+        this.idx = 0;  
+        this.getList({status:-1});        
+    },
+    onReachBottom(){
+        this.updatePage(this.page+1);
+        if(this.idx === 3){
+            this.getList()
+        }else{
+            this.getList({status:this.idx-1})
+        }
     }
 }
 </script>
 
 <style scoped>
     .list{
-        width:100%;
-        height:100%;
-        display: flex;
-        flex-direction: column;
+        /* width:100%;
+        height:100%; */
+        /* display: flex;
+        flex-direction: column;  */
         overflow: hidden;
     }
     .nav{
         display: flex;
         justify-content: space-around;
+        width:100%;
         height: 88rpx;
         line-height: 88rpx;
         border-top:3rpx solid #eee;
+        position: fixed;
+        top:0;
+        left: 0;
+        background: #fff;
+        border-bottom:1rpx solid #eee;
     }
     .content{
-        flex:1;
-        overflow-y: auto;      
+        /* flex:1;
+        overflow-y: scroll;       */
+        padding-top:88rpx;
     }
     .active{
         color:#197dbf;

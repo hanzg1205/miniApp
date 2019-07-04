@@ -4,6 +4,8 @@ import moment from "moment";
 const state = {
     signList: [], // 面试列表
     signDetail: {}, // 详情
+    pageSize: 10,
+    page: 1
 }
 
 const getters = {
@@ -12,20 +14,27 @@ const getters = {
 
 const actions = {
     // 获取面试列表
-    async getList({commit}, payload){
+    async getList({state,commit}, payload={}){       
+        payload.pageSize = state.pageSize;
+        payload.page = state.page;
         let {data} = await getList(payload);      
         data.forEach(item => {
             item.address = JSON.parse(item.address);
             item.start_time = formatTime(item.start_time);
         })
-        commit('updateList',data)
+        // 判断是替换还是追加
+        if (state.page === 1){
+            commit('updateList',{signList: data})
+        }else{
+            commit('updateList',{signList: [...state.signList, ...data]})
+        }
+        // commit('updateList',data)
     },
     // 获取面试详情
     async getDetail({commit}, payload){
         let {data} = await getDetail(payload);
         data.address = JSON.parse(data.address);
         data.start_time = formatTime(data.start_time);
-        console.log("xiang....",data);
         commit('updateDetail',data)
     },
     // 修改面试状态
@@ -40,10 +49,13 @@ const actions = {
 
 const mutations = {
     updateList(state,payload){
-        state.signList = payload
+        state.signList = payload.signList
     },
     updateDetail(state, payload){
         state.signDetail = payload
+    },
+    updatePage(state,payload){
+        state.page = payload
     }
 }
 

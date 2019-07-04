@@ -6,7 +6,7 @@
         </header>
         <ul class="search-list">
             <li v-for="(item,index) in signList" :key="index" @click="select(index)">
-                <cover-image src="/static/images/location.svg" alt="" class="img"></cover-image>
+                <image src="/static/images/location.svg" alt="" class="img"></image>
                 <div class="cont">
                     <p class="top">{{item.title}}</p>
                     <p class="bottom">{{item.address}}</p>
@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import { debounce } from '@/utils/index.js'
 import { mapMutations } from "vuex";
 export default {
     data(){
@@ -32,7 +33,7 @@ export default {
     },
     created(){
         let that = this;
-        this.search = function(val){
+        this.search = debounce((val)=>{
             this.$map.search({
                 keyword: val,
                 region: '北京',
@@ -40,7 +41,7 @@ export default {
                     that.signList = res.data;
                 }
             })  
-        }       
+        },300)      
     },
     methods: {
         ...mapMutations({
