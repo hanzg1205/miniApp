@@ -15,7 +15,7 @@ const HOST = 'https://127.0.0.1' // 更改
 fly.interceptors.request.use((request) => {
   // 把openid放在请求头部
   let openid = wx.getStorageSync('openId');
-  console.log('openid...',openid)
+  // console.log('openid...',openid)
   if (openid){
     request.headers['openid'] = openid;
   }

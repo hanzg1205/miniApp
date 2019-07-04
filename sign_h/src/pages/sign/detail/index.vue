@@ -60,7 +60,7 @@ export default {
             // 取消提醒
             this.updateDetail({
                 id: this.id,
-                params: {remind: e.target.value?1:-1}
+                params: { remind: e.target.value ? 1 : -1 }
             })
         },
         giveup(){
@@ -72,11 +72,17 @@ export default {
                     if (res.confirm) {
                         await this.updateDetail({
                             id: this.id,
-                            params: {  status: 1}
+                            params: { status: 1 }
                         })
                     }
                 }
             });
+        },
+        goSign(){
+            // 跳打卡页面
+            wx.navigateTo({
+                url: '/pages/sign/sign/main'
+            }) 
         }
     },
     computed: {

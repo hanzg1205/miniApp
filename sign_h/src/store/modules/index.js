@@ -1,6 +1,6 @@
 const state = {
-    longitude: '80',
-    latitude: '122',
+    longitude: 116.29845,
+    latitude: 39.95933,
 }
 
 const getters = {

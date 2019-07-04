@@ -33,9 +33,9 @@ export default {
         })
     },
     created(){
-        let qqMapSdk = new QQMapWX({
-            key: 'X7RBZ-MMOKR-UQEWJ-WSCXC-IVXVK-IFFLL'
-        });
+        // let qqMapSdk = new QQMapWX({
+        //     key: 'X7RBZ-MMOKR-UQEWJ-WSCXC-IVXVK-IFFLL'
+        // });
         // let that = this;
         // wx.getLocation({
         //     type: 'wgs84',

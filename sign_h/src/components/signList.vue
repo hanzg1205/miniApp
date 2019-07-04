@@ -4,12 +4,12 @@
             <li v-for="(item,index) in options" :key="index" @click="goDetail(item.id)">
                 <p class="top">
                     <span class="title">{{item.company}}</span>
-                    <span class="tag3">{{item.status ? item.status === -1 ? '未开始' : '已放弃' : '已打卡'}}</span>
+                    <span :class="'tag'+(item.status+1)">{{item.status ? item.status === -1 ? '未开始' : '已放弃' : '已打卡'}}</span>
                 </p>
                 <p class="center">{{item.address.address}}</p>
                 <p class="btm">
                     <span class="time">面试时间: {{item.start_time}}</span>
-                    <span class="tag1">{{item.remind ? '未提醒' : '已提醒'}}</span>
+                    <span :class="'tag'+(item.remind+1===2?0:item.remind+1===0?0:1)">{{item.remind ? '未提醒' : '已提醒'}}</span>
                 </p>
             </li>
         </ul>
@@ -23,7 +23,7 @@ export default {
     methods:{
         goDetail(id){
              wx.navigateTo({
-                url: '/pages/detail/main?id='+id
+                url: '/pages/sign/detail/main?id='+id
             })
         }
     }
@@ -52,13 +52,28 @@ export default {
         font-size:44rpx;
         font-weight:500;      
     }
-    .tag3{
+    .tag0{
+        font-size:30rpx;
+        background-color:hsla(220,4%,58%,.1);
+        border-color:hsla(220,4%,58%,.2);
+        color:#909399;
+        padding:5rpx 10rpx;
+    }
+    .tag1{
+        font-size:30rpx;
+        padding:5rpx 10rpx;
+        background-color:rgba(64,158,255,.1);
+        color:#409eff;
+        border:2rpx solid 409eff;
+    }
+    .tag2{
         font-size:30rpx;
         padding:5rpx 10rpx;
         background-color:hsla(0,87%,69%,.1);
         border-color:hsla(0,87%,69%,.2);
         color:#f56c6c
     }
+  
     .center{
         font-size:32rpx;
         color:#999;
@@ -81,12 +96,7 @@ export default {
         font-size:34rpx;
         color:#666;
     }
-    .tag1{
-        background-color:hsla(220,4%,58%,.1);
-        border-color:hsla(220,4%,58%,.2);
-        color:#909399;
-        padding:5rpx 10rpx;
-    }
+   
     .none{
         width:100%;
         text-align: center;
