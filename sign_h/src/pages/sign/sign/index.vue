@@ -1,7 +1,7 @@
 <template>
     <div class="home">
         <div class="map">
-            <QQMap></QQMap> 
+            <QQMap :markers="markers" :updateDistance="updateDistance"></QQMap> 
         </div>
         <button @click="goSign" class="btn">打卡</button>
     </div>
@@ -13,7 +13,7 @@ import { mapState, mapActions } from 'vuex';
 export default {
     data () {
         return {
-        
+            distance: 0
         }
     },
 
@@ -23,28 +23,57 @@ export default {
     computed: {
         ...mapState({
             info: state => state.signList.signDetail
-        })
+        }),
+        markers(){
+            if (this.info && Object.keys(this.info)){
+                return [{
+                    iconPath: '/static/images/job.png',
+                    latitude: this.info.latitude,
+                    longitude: this.info.longitude,
+                    title: this.info.company,
+                    width: 20,
+                    height: 20
+                }]
+            }else{
+                return []
+            }
+        }
     },
     methods: {
         ...mapActions({
             updateDetail: 'signList/updateDetail'
         }),
+        updateDistance(distance){
+            console.log('distance...', distance);
+            this.distance = distance;
+        },
         async goSign(){
-            let result = await this.updateDetail({
-                id: this.info.id,
-                params: {
-                    status: 0,
-                    sign_time: +new Date()
-                }
-            })
-            console.log('result...',result)
-            if(result.code === 0){
+            let distance = this.distance;
+            if (this.distance < 100){
+                let result = await this.updateDetail({
+                    id: this.info.id,
+                    params: {
+                        status: 0,
+                        sign_time: +new Date()
+                    }
+                })
+                console.log('result...', result);
                 wx.showToast({
-                    title: '打卡成功', 
-                    icon: 'none' 
+                    title: '打卡成功', //提示的内容,
+                    icon: 'none' //图标,
+                });
+            }else{
+                if (this.distance > 1000){
+                    distance = (this.distance/1000).toFixed(2)+'公里'
+                }else{
+                    distance = this.distance+'米'
+                }
+                console.log('distance...', distance, this.distance);
+                wx.showToast({
+                    title: `你距目的地还有${distance},暂时还不能打卡`, //提示的内容
+                    icon: 'none'
                 });
             }
-            
         },
         
     },

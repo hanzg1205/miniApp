@@ -4,28 +4,25 @@
             <div class="avator">
                 <img src="/static/images/my.png" alt="">
             </div>
-            <h4 class="title">{{phoneNumber}}</h4>
+            <h4 class="title">{{formatPhone}}</h4>
         </div>
         <ul class="my-list">
-            <li @click="goListFn">
-                <icon
-                    class="tip"
-                    type="info"
-                    color="#10AEFF"
-                    size="18">
-                </icon>
-                <span>我的面试</span>
-                <img src="/static/images/arrow.svg" alt="">
-            </li>
-            <li>
+            <li @click="goListFn" class="top">
                 <icon
                     class="tip"
                     type="waiting"
                     color="#10AEFF"
                     size="18">
                 </icon>
-                <span>客服中心</span>
-                <img src="/static/images/arrow.svg" alt="">
+                <span>我的面试</span>
+                <image src="/static/images/arrow.svg" alt=""></image>
+            </li>
+            <li>
+                <button open-type="contact" class="concat">
+                    <icon type="info" size="18px" class="tip"/>
+                    <span>客服中心</span>
+                    <image src="/static/images/arrow.svg"></image>
+                </button>
             </li>
         </ul>
         <div class="phone" v-if="showPhoneDialog" >
@@ -44,8 +41,18 @@ export default {
         return {
             showSetting: false,
             hasPhone: false,
-            phoneNumber: '',
+            phoneNumber: '***********',
             showPhoneDialog: true
+        }
+    },
+    computed: {
+        formatPhone(){
+            let phone = this.phoneNumber;
+            if (phone){
+                return phone.slice(0,3)+'****'+phone.slice(7,11)
+            }else{
+                return '***********'
+            }
         }
     },
     methods: {
@@ -125,14 +132,32 @@ export default {
     }
     .my-list li{
         width:100%;
+        height: 100rpx;
         display:flex;
         align-items:center;
         justify-content:space-between;
         box-sizing:border-box;
-        padding:30rpx 40rpx;
+        padding:0 40rpx;
         border-bottom:1rpx solid #eee;
     }
-    .my-list li img{
+    .my-list li button{
+        width:100%;
+        height: 100%;
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        box-sizing:border-box;
+        background: #fff;
+        border:0;
+        padding:0;
+        outline: 0;
+        text-align: left;
+        font-size: 18px;
+    }
+    .my-list li button::after {
+        border: none
+    }
+    .my-list li image{
         width:40rpx;
         height:40rpx;
     }

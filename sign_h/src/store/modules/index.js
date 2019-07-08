@@ -10,7 +10,7 @@ const getters = {
 const actions = {
     getLocation({commit}, payload){
         wx.getLocation({
-            type: 'wgs84',
+            type: 'gcj02',
             success(res){
                 commit('updateLocation',res)
             }

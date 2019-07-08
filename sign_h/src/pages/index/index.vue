@@ -1,9 +1,9 @@
 <template>
   <div class="home">
     <div class="map">
-      <QQMap></QQMap>
+      <QQMap :reLocation="reLocation"></QQMap>
       <cover-view class="icon-btn">       
-        <cover-image src="/static/images/location.png" alt="" class="img-btn"></cover-image>
+        <!-- <cover-image src="/static/images/location.png" alt="" class="img-btn"></cover-image> -->
         <cover-image src="/static/images/my.png" alt="" class="img-btn myBtn" @click="goMyFn"></cover-image>
       </cover-view>
     </div>   
@@ -13,11 +13,14 @@
 </template>
 
 <script>
+import {getLocation} from '@/utils/index.js'
 import QQMap from "@/components/qqMap.vue";
 export default {
   data () {
     return {
-      userInfoFlag: false
+      userInfoFlag: false,
+      reLocation: false,
+      markers: []
     }
   },
 
@@ -72,32 +75,32 @@ export default {
           } else {
             that.userInfoFlag = true;
           }
-          if (!res.authSetting['scope.userLocation']) {
+          // if (!res.authSetting['scope.userLocation']) {
             
-            wx.authorize({
-                scope: 'scope.userLocation',
-                success() {
-                  console.log('success')
-                },
-                fail: (err) => {
-                  console.log("err***",err)
-                   wx.showModal({
-                    title: '亲爱的用户', //提示的标题,
-                    content: '同意我们的授权，让我们为你提供更加优质的服务', //提示的内容,
-                    showCancel: false, //是否显示取消按钮,
-                    confirmText: '去设置', //确定按钮的文字，默认为取消，最多 4 个字符,
-                    confirmColor: '#3CC51F',   //确定按钮的文字颜色
-                    success: res => {
-                      wx.openSetting({
-                        success:()=>{
-                          that.getSetting();
-                        }
-                      });            
-                    }
-                  })
-                }
-            })
-          }
+          //   wx.authorize({
+          //       scope: 'scope.userLocation',
+          //       success() {
+          //         console.log('success')
+          //       },
+          //       fail: (err) => {
+          //         console.log("err***",err)
+          //          wx.showModal({
+          //           title: '亲爱的用户', //提示的标题,
+          //           content: '同意我们的授权，让我们为你提供更加优质的服务', //提示的内容,
+          //           showCancel: false, //是否显示取消按钮,
+          //           confirmText: '去设置', //确定按钮的文字，默认为取消，最多 4 个字符,
+          //           confirmColor: '#3CC51F',   //确定按钮的文字颜色
+          //           success: res => {
+          //             wx.openSetting({
+          //               success:()=>{
+          //                 that.getSetting();
+          //               }
+          //             });            
+          //           }
+          //         })
+          //       }
+          //   })
+          // }
         },  
         
       })
@@ -135,15 +138,11 @@ page{
   border-radius: 0;
 }
 .icon-btn{
-  width: 100%;
+  width: 80rpx;
   height: 80rpx;
   position: absolute;
   bottom: 50rpx;
-  left:0;
-  display: flex;
-  justify-content: space-between;
-  padding:0 20rpx;
-  box-sizing: border-box;
+  right:20rpx;
   z-index: 99;
 }
 .icon-btn .img-btn{

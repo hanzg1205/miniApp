@@ -21,7 +21,8 @@
                 <label for="true">面试状态：</label>
                 <span>{{detailList.status ? detailList.status === -1 ? '未开始' : '已放弃' : '已打卡'}}</span>
             </li>
-            <li v-if="detailList.status === -1">
+            
+            <li v-if="detailList.status === -1 && detailList.remind != 0">
                 <label for="true">取消提醒：</label>
                 <switch :checked="detailList.remind === 1" @change="cancelRemind" />
             </li>
