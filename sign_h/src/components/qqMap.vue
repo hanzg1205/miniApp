@@ -63,7 +63,7 @@ export default {
             default: false
         },
         updateDistance: {
-            typef: Function,
+            type: Function,
             default: ()=>{}
         }
     },
